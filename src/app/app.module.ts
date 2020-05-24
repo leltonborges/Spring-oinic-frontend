@@ -1,3 +1,4 @@
+import { ClientService } from './../services/domain/client.service';
 import { StorageService } from './../services/storageService';
 import { CategoriaService } from './../services/domain/categoria.service';
 import { BrowserModule } from '@angular/platform-browser';
@@ -32,7 +33,8 @@ import { AuthService } from '../services/auth.service';
     CategoriaService,
     ErrorInterceptorProvider,
     AuthService,
-    StorageService
+    StorageService,
+    ClientService
   ]
 })
 export class AppModule {}
