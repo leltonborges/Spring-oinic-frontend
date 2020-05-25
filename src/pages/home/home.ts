@@ -39,11 +39,16 @@ export class HomePage {
    this.menu.swipeEnable(true);
   }
 
-  // ionViewDidEnter(){
-  //   this.auth.refreshTokem()
-  //   .subscribe(reponse => {
-  //     this.auth.successFullLogin(reponse.headers.get('Authorization'));
-  //     this.navCtrl.setRoot('CategoriasPage');
-  //   });
-  // }
+  ionViewDidEnter(){
+    this.auth.refreshTokem()
+    .subscribe(reponse => {
+      this.auth.successFullLogin(reponse.headers.get('Authorization'));
+      this.navCtrl.setRoot('CategoriasPage');
+    },
+    error => {});
+  }
+
+  signup(){
+    this.navCtrl.push('SignupPage');
+  }
 }
