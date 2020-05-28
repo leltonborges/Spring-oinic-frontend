@@ -8,9 +8,9 @@
   <form [formGroup]="formGroup" (ngSubmit)="signupUser(); $event.preventDefault()">
     <ion-item>
       <ion-label stacked>Nome*</ion-label>
-      <ion-input formControlName="nome" type="text"></ion-input>
+      <ion-input formControlName="name" type="text"></ion-input>
     </ion-item>
-    <p *ngIf="formGroup.controls.nome.dirty && formGroup.controls.nome.errors" margin-left>Valor inválido</p>
+    <p *ngIf="formGroup.controls.name.dirty && formGroup.controls.name.errors" margin-left>Valor inválido</p>
     <ion-item>
       <ion-label stacked>Email*</ion-label>
       <ion-input formControlName="email" type="text"></ion-input>
@@ -36,10 +36,10 @@
     </ion-item>
     <p *ngIf="formGroup.controls.cpfOuCnpj.dirty && formGroup.controls.cpfOuCnpj.errors" margin-left>Valor inválido</p>
     <ion-item>
-      <ion-label stacked>Senha*</ion-label>
-      <ion-input formControlName="senha" type="password"></ion-input>
+      <ion-label stacked>Password*</ion-label>
+      <ion-input formControlName="password" type="password"></ion-input>
     </ion-item> 
-    <p *ngIf="formGroup.controls.senha.dirty && formGroup.controls.senha.errors" margin-left>Valor inválido</p>
+    <p *ngIf="formGroup.controls.password.dirty && formGroup.controls.password.errors" margin-left>Valor inválido</p>
     <ion-item>
       <ion-label stacked>Logradouro*</ion-label>
       <ion-input formControlName="logradouro" type="text"></ion-input>
