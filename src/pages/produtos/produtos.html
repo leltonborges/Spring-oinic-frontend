@@ -6,9 +6,10 @@
     <ion-title>Produtos</ion-title>
   </ion-navbar>
 </ion-header>
+
 <ion-content padding>
   <ion-list>
-    <button ion-item *ngFor="let item of items">
+    <button ion-item *ngFor="let item of items" (click) = "showDetail()">
       <ion-thumbnail item-start>
         <img [src] = "item.imageUrl || 'assets/imgs/prod.jpg'">
       </ion-thumbnail>    
@@ -16,7 +17,4 @@
       <p>{{ item.price | currency }}</p>
     </button>
   </ion-list>
-</ion-content>
-<ion-content padding>
-
 </ion-content>
