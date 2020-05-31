@@ -1,3 +1,4 @@
+import { CartService } from './../services/domain/cart.service';
 import { ProductService } from './../services/domain/produto.service';
 import { AuthInterceptorProvider } from './../Interceptors/auth-interceptor';
 import { ClientService } from './../services/domain/client.service';
@@ -38,7 +39,8 @@ import { AuthService } from '../services/auth.service';
     AuthService,
     StorageService,
     ClientService,
-    ProductService
+    ProductService,
+    CartService
   ]
 })
 export class AppModule {}
