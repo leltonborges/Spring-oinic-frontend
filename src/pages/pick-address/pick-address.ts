@@ -1,3 +1,5 @@
+import { ClientService } from './../../services/domain/client.service';
+import { StorageService } from './../../services/storageService';
 import { EnderecoDTO } from './../../models/endereco.dto';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
@@ -11,44 +13,28 @@ export class PickAddressPage {
 
   items: EnderecoDTO[];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams,
+    public storage: StorageService,
+    public clientService: ClientService) {
   }
 
   ionViewDidLoad() {
-    this.items = [
-      {
-        id: "1",
-        logradouro: "Rua Quinze de Novembro",
-        number: "300",
-        complement: "Apto 200",
-        neighborhood: "Santa Mônica",
-        cep: "48293822",
-        city: {
-          id: "1",
-          name: "Uberlândia",
-          state: {
-            id: "1",
-            name: "Minas Gerais"
-          }
-        }
+    let localUser = this.storage.getLocalUser();
+    if(localUser && localUser.email){
+      this.clientService.findByEmail(localUser.email)
+      .subscribe(response => {
+        this.items = response['addresses'];
       },
-      {
-        id: "2",
-        logradouro: "Rua Alexandre Toledo da Silva",
-        number: "405",
-        complement: null,
-        neighborhood: "Centro",
-        cep: "88933822",
-        city: {
-          id: "3",
-          name: "São Paulo",
-          state: {
-            id: "2",
-            name: "São Paulo"
-          }
+      error => {
+        if(error.status == 403){
+          this.navCtrl.setRoot('HomePage');
         }
+      });
+      }else{
+        this.navCtrl.setRoot('HomaPage');
       }
-    ];
-  }
-
+    }
+  
 }
