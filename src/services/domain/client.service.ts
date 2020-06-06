@@ -33,4 +33,8 @@ export class ClientService{
         );
        
     }
+
+    findById(id: string){
+        return this.http.get(`${API_CONFIG.baseUrl}/clients/${id}`)
+    }
 }

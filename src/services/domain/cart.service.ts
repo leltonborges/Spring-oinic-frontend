@@ -68,10 +68,10 @@ export class CartService{
         return cart;
     }
 
-    totalCart(): number{
+    totalCart(): number {
         let cart = this.getCart();
         let sum = 0;
-        for(var i=0; i<cart.items.length; i++){
+        for (var i=0; i<cart.items.length; i++) {
             sum += cart.items[i].product.price * cart.items[i].quantity;
         }
         return sum;
