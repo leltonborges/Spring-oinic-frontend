@@ -11,7 +11,8 @@ import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-an
 })
 export class ProdutosPage {
 
-  items: ProductDTO[];
+  items: ProductDTO[] = [];
+  page: number = 0;
 
   constructor(
     public navCtrl: NavController, 
@@ -27,18 +28,20 @@ export class ProdutosPage {
   loadData(){
     let categoria_id = this.navParams.get('cat_id');
     let loader = this.presentLoad();
-    this.productService.findByCategoria(categoria_id)
+    this.productService.findByCategoria(categoria_id, this.page, 10)
       .subscribe(response => {
-        this.items = response['content'];
-        this.loadImageUrl();
+        let start = this.items.length;
+        this.items = this.items.concat(response['content']);
+        let end  = this.items.length;
+        this.loadImageUrl(start, end);
         loader.dismiss();
       },
       error => {
         loader.dismiss();
       });
   }
-  loadImageUrl(){
-    for(var i=0; i < this.items.length; i++){
+  loadImageUrl(start: number, end: number){
+    for(var i=start; i < end; i++){
       let item = this.items[i];
       this.productService.getSmallImageFromBucket(item.id)
       .subscribe(reponse => {
@@ -63,9 +66,19 @@ export class ProdutosPage {
   }
 
   doRefresh(refresher){
+    this.page = 0;
+    this.items = [];
     this.loadData();
     setTimeout( () => {
       refresher.complete();
+    }, 1000);
+  }
+
+  doInfinite(infiniteScroll){
+    this.page++;
+    this.loadData();
+    setTimeout( () => {
+      infiniteScroll.complete();
     }, 1000);
   }
 }
