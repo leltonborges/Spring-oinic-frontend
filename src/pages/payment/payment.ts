@@ -1,5 +1,5 @@
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { RequestDTO } from './../../models/request.dto';
+import { OrderDTO } from '../../models/order.dto';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
@@ -10,7 +10,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class PaymentPage {
 
-  order: RequestDTO;
+  order: OrderDTO;
   parcelas: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   formGroup: FormGroup;

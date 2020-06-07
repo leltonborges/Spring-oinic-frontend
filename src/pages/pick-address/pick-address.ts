@@ -1,6 +1,6 @@
 import { ProductDTO } from './../../models/produto.dto';
 import { CartService } from './../../services/domain/cart.service';
-import { RequestDTO } from './../../models/request.dto';
+import { OrderDTO } from '../../models/order.dto';
 import { ClientService } from './../../services/domain/client.service';
 import { StorageService } from './../../services/storageService';
 import { EnderecoDTO } from './../../models/endereco.dto';
@@ -15,7 +15,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 export class PickAddressPage {
 
   items: EnderecoDTO[];
-  request: RequestDTO;
+  request: OrderDTO;
 
   constructor(
     public navCtrl: NavController, 

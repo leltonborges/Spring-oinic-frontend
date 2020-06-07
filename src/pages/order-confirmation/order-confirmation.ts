@@ -1,9 +1,10 @@
+import { OrderService } from './../../services/domain/order.service';
 import { ClientService } from './../../services/domain/client.service';
 import { EnderecoDTO } from './../../models/endereco.dto';
 import { ClientDTO } from './../../models/client.dto';
 import { CartService } from './../../services/domain/cart.service';
 import { CartItem } from './../../models/cart-item';
-import { RequestDTO } from './../../models/request.dto';
+import { OrderDTO } from '../../models/order.dto';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
@@ -14,7 +15,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class OrderConfirmationPage {
 
-  order: RequestDTO;
+  order: OrderDTO;
   cartItems:CartItem[];
   client: ClientDTO;
   address: EnderecoDTO;
@@ -23,7 +24,8 @@ export class OrderConfirmationPage {
     public navCtrl: NavController, 
     public navParams: NavParams,
     public cartService: CartService,
-    public clientService: ClientService) {
+    public clientService: ClientService,
+    public orderService: OrderService) {
 
     this.order = this.navParams.get('order');
   }
@@ -47,5 +49,22 @@ export class OrderConfirmationPage {
 
   total(){
     return this.cartService.totalCart();
+  }
+  
+  checkout(){
+    this.orderService.insert(this.order)
+    .subscribe(response => {
+      this.cartService.createOrClearCart();
+      console.log(response.headers.get('location'));
+    },
+    error => {
+      if(error.status == 403){
+        this.navCtrl.setRoot('HomePage');
+      }
+    });
+  }
+
+  back(){
+    this.navCtrl.setRoot('CartPage');
   }
 }
