@@ -26,6 +26,10 @@ export class ProfilePage {
   }
 
   ionViewDidLoad() {
+    this.loadData();
+  }
+
+  loadData(){
     let localUser = this.storage.getLocalUser();
     if(localUser && localUser.email){
       this.clientService.findByEmail(localUser.email)
@@ -46,7 +50,7 @@ export class ProfilePage {
   getImageIfExists(){
     this.clientService.getImageFromBucket(this.client.id)
     .subscribe(response => {
-      this.client.imageUrl = `${API_CONFIG.bucketBaseUrl}/cp${this.client.id}.jpg`;
+      this.client.imageUrl = `${API_CONFIG.bucketBaseUrl}/cp_img${this.client.id}.jpg`;
       console.log(this.client.imageUrl);
     },
     error => {});
@@ -65,5 +69,18 @@ export class ProfilePage {
      this.cameraOn = false;
     }, (err) => {
     });
+  }
+
+  sendPicture(){
+    this.clientService.uploadePicture(this.picture)
+    .subscribe(response => {
+      this.picture = null;
+      this.loadData();
+    },
+    error => {});
+  }
+
+  calcel(){
+    this.picture = null;
   }
 }

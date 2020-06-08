@@ -1,3 +1,4 @@
+import { ImageUtilService } from './../image-util.service';
 import { StorageService } from './../storageService';
 import { API_CONFIG } from './../../config/api.config';
 import { Observable } from 'rxjs/Rx';
@@ -10,7 +11,8 @@ export class ClientService{
 
     constructor(
         public http: HttpClient,
-        public storage: StorageService){
+        public storage: StorageService,
+        public imageUtilService: ImageUtilService){
 
     }
 
@@ -19,7 +21,7 @@ export class ClientService{
     }
 
     getImageFromBucket(id: string): Observable<any>{
-        let url = `${API_CONFIG.bucketBaseUrl}/cp${id}.jpg`;
+        let url = `${API_CONFIG.bucketBaseUrl}/cp_img${id}.jpg`;
         return this.http.get(url, {responseType: 'blob'});
     }
 
@@ -36,5 +38,19 @@ export class ClientService{
 
     findById(id: string){
         return this.http.get(`${API_CONFIG.baseUrl}/clients/${id}`)
+    }
+
+    uploadePicture(picture){
+        let pictureBlob = this.imageUtilService.dataUriToBlob(picture);
+        let formData: FormData = new FormData();
+
+        formData.append('file', pictureBlob, 'file.png');
+
+        return this.http.post(`${API_CONFIG.baseUrl}/clients/picture`, 
+        formData,
+        {
+            observe: 'response',
+            responseType: 'text'
+        });
     }
 }
