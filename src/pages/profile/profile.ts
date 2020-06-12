@@ -4,7 +4,8 @@ import { ClientDTO } from './../../models/client.dto';
 import { StorageService } from './../../services/storageService';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
-import { Camera, CameraOptions } from '@ionic-native/camera';;
+import { Camera, CameraOptions } from '@ionic-native/camera';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @IonicPage()
 @Component({
@@ -16,6 +17,7 @@ export class ProfilePage {
   client: ClientDTO;
   picture: string;
   cameraOn: boolean = false;
+  profileImage;
 
   constructor(
     public navCtrl: NavController,
@@ -23,7 +25,11 @@ export class ProfilePage {
     public storage: StorageService,
     public clientService: ClientService,
     public camera: Camera,
-    public loadingCtrl: LoadingController) {
+    public loadingCtrl: LoadingController,
+    public sanitizer: DomSanitizer) {
+
+      this.profileImage = 'assets/imgs/avatar-blank.png';
+
   }
 
   ionViewDidLoad() {
@@ -52,8 +58,14 @@ export class ProfilePage {
     this.clientService.getImageFromBucket(this.client.id)
     .subscribe(response => {
       this.client.imageUrl = `${API_CONFIG.bucketBaseUrl}/cp_img${this.client.id}.jpg`;
+      this.blobToDataURL(response).then(dataUrl => {
+        let str : string = dataUrl as string;
+        this.profileImage = this.sanitizer.bypassSecurityTrustUrl(str);
+      })
     },
-    error => {});
+    error => {
+      this.profileImage = 'assets/imgs/avatar-blank.png';
+    });
   }
 
   getCameraPicture(){
@@ -93,8 +105,8 @@ export class ProfilePage {
     let loader = this.presentLoad();
     this.clientService.uploadePicture(this.picture)
     .subscribe(response => {
+      this.getImageIfExists();
       this.picture = null;
-      this.loadData();
       loader.dismiss();
     },
     error => {
@@ -114,5 +126,14 @@ export class ProfilePage {
     );
     loader.present();
     return loader;
+  }
+
+  blobToDataURL(blob){
+    return new Promise((fulfil, reject) => {
+      let reader = new FileReader();
+      reader.onerror = reject;
+      reader.onload = (e) => fulfil(reader.result);
+      reader.readAsDataURL(blob);
+    });
   }
 }
