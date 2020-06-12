@@ -3,7 +3,7 @@ import { ClientService } from './../../services/domain/client.service';
 import { ClientDTO } from './../../models/client.dto';
 import { StorageService } from './../../services/storageService';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';;
 
 @IonicPage()
@@ -22,7 +22,8 @@ export class ProfilePage {
     public navParams: NavParams,
     public storage: StorageService,
     public clientService: ClientService,
-    public camera: Camera) {
+    public camera: Camera,
+    public loadingCtrl: LoadingController) {
   }
 
   ionViewDidLoad() {
@@ -67,6 +68,7 @@ export class ProfilePage {
      this.picture = 'data:image/jpeg;base64,' + imageData;
      this.cameraOn = false;
     }, (err) => {
+      this.cameraOn = false;
     });
   }
 
@@ -83,19 +85,34 @@ export class ProfilePage {
        this.picture = 'data:image/jpeg;base64,' + imageData;
        this.cameraOn = false;
       }, (err) => {
+        this.cameraOn = false;
       });
     }
     
   sendPicture(){
+    let loader = this.presentLoad();
     this.clientService.uploadePicture(this.picture)
     .subscribe(response => {
       this.picture = null;
       this.loadData();
+      loader.dismiss();
     },
-    error => {});
+    error => {
+      loader.dismiss();
+    });
   }
 
   calcel(){
     this.picture = null;
+  }
+
+  presentLoad(){
+    let loader = this.loadingCtrl.create(
+      {
+        content:"Aguarde..."
+      }
+    );
+    loader.present();
+    return loader;
   }
 }
